@@ -3,20 +3,26 @@
 % side-by-side style comparison in MP4 format.
 %
 % Output:
-%   - ../videos/drag_comparison_animation.mp4
+%   - out/videos/drag_comparison_animation.mp4
 function projectile_trajectory_drag_comparison_video(~, ~)
     clc; close all;
+    base_dir = fileparts(mfilename('fullpath'));
+    project_dir = fileparts(fileparts(base_dir));
+    out_dir = fullfile(project_dir, 'out', 'logs');
+    images_dir = fullfile(project_dir, 'out', 'images');
+    videos_dir = fullfile(project_dir, 'out', 'videos');
 
     % Create output folders if needed
-    if ~exist('../out', 'dir')
-        mkdir('out');
+    if ~exist(out_dir, 'dir')
+        mkdir(out_dir);
     end
-    if ~exist('images', 'dir')
-        mkdir('images');
+    if ~exist(images_dir, 'dir')
+        mkdir(images_dir);
     end
-    if ~exist('../videos', 'dir')
-        mkdir('/videos');
+    if ~exist(videos_dir, 'dir')
+        mkdir(videos_dir);
     end
+    is_batch = is_batch_mode();
 
     %% Physical constants
     g = 9.80665;          % gravity (m/s^2)
@@ -55,7 +61,7 @@ function projectile_trajectory_drag_comparison_video(~, ~)
 
     %% Animation + MP4 recording
     animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
-                                  tN, vxN, vyN, xN, yN);
+                                  tN, vxN, vyN, xN, yN, videos_dir, is_batch);
 end
 
 
@@ -135,9 +141,10 @@ end
 
 
 function animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
-                                       tN, vxN, vyN, xN, yN)
+                                       tN, vxN, vyN, xN, yN, videos_dir, is_batch)
 
-    fig = figure('Position', [100, 100, 1100, 680], 'Color', [0.75 0.87 1]);
+    fig = figure('Position', [100, 100, 1100, 680], 'Color', [0.75 0.87 1], ...
+        'Visible', figure_visibility(is_batch));
     hold on; grid on; box on;
 
     xlabel('Horizontal Position (km)', 'FontSize', 11);
@@ -184,7 +191,7 @@ function animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
         'HorizontalAlignment', 'right', 'Color', [0 0.45 0], 'FontSize', 10, 'FontWeight', 'bold');
 
     % Video writer
-    videoPath = fullfile('..', 'videos', 'drag_comparison_animation.mp4');
+    videoPath = fullfile(videos_dir, 'drag_comparison_animation.mp4');
     vw = VideoWriter(videoPath, 'MPEG-4');
     vw.FrameRate = 30;
     vw.Quality = 100;
@@ -194,6 +201,9 @@ function animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
 
     % To reduce video size and keep animation fluid
     step = 3;
+    if is_batch
+        step = max(step, ceil(Nmax / 300));
+    end
 
     for i = 2:step:Nmax
 
@@ -247,7 +257,7 @@ function animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
                                      '|v| = %.2f m/s'], xcurN, ycurN, vN));
         set(txt4, 'String', msg);
 
-        drawnow;
+        drawnow limitrate nocallbacks;
 
         frame = getframe(fig);
         writeVideo(vw, frame);
@@ -257,11 +267,24 @@ function animate_comparison_live_video(tD, vxD, vyD, xD, yD, ...
     plot(xD(end)/1e3, yD(end)/1e3, 'x', 'Color', 'r', 'LineWidth', 2, 'MarkerSize', 10);
     plot(xN(end)/1e3, yN(end)/1e3, 'x', 'Color', 'b', 'LineWidth', 2, 'MarkerSize', 10);
 
-    drawnow;
+    drawnow limitrate nocallbacks;
     frame = getframe(fig);
     writeVideo(vw, frame);
 
     close(vw);
+    close(fig);
 
     fprintf('\nVidéo enregistrée avec succès : %s\n', videoPath);
+end
+
+function mode = figure_visibility(is_batch)
+    if is_batch
+        mode = 'off';
+    else
+        mode = 'on';
+    end
+end
+
+function tf = is_batch_mode()
+    tf = ~usejava('desktop');
 end

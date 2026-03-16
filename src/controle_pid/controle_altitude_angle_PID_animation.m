@@ -7,6 +7,14 @@
 % The simulation includes actuator saturation, simple anti-windup,
 % vertical and angular disturbances, and a live animation of the response.
 clc; clear; close all;
+base_dir = fileparts(mfilename('fullpath'));
+project_dir = fileparts(fileparts(base_dir));
+images_dir = fullfile(project_dir, 'out', 'images');
+is_batch = ~usejava('desktop');
+
+if ~exist(images_dir, 'dir')
+    mkdir(images_dir);
+end
 
 %% Paramètres physiques
 m = 1.5;           % masse (kg)
@@ -126,7 +134,8 @@ for k = 2:N
 end
 
 %% Figure avec animation
-fig = figure('Position',[100 80 1100 750],'Color','w');
+fig = figure('Position',[100 80 1100 750],'Color','w', ...
+    'Visible', figure_visibility(is_batch));
 
 % Sous-figure animation
 subplot(2,2,[1 3]);
@@ -242,6 +251,19 @@ for k = 1:step:N
     subplot(2,2,4);
     set(hAng, 'XData', t(1:k), 'YData', rad2deg(theta(1:k)));
 
-    drawnow;
-    pause(0.01);
+    drawnow limitrate nocallbacks;
+    if ~is_batch
+        pause(0.01);
+    end
+end
+
+saveas(fig, fullfile(images_dir, 'controle_altitude_angle_PID_animation.png'));
+close(fig);
+
+function mode = figure_visibility(is_batch)
+if is_batch
+    mode = 'off';
+else
+    mode = 'on';
+end
 end

@@ -4,8 +4,8 @@
 % flight times on a single figure and in a text log.
 %
 % Generated outputs:
-%   - ../images/comparaison_trajectoires_angles.png
-%   - ../out/log_compare_angles.txt
+%   - out/images/comparaison_trajectoires_angles.png
+%   - out/logs/log_compare_angles.txt
 %
 % Main steps:
 %   1. Define physical parameters and drag coefficients
@@ -13,17 +13,21 @@
 %   3. Compute summary quantities
 %   4. Save a comparison plot and a log file
 function compare_projectile_angles()
+    base_dir = fileparts(mfilename('fullpath'));
+    project_dir = fileparts(fileparts(base_dir));
+    out_dir = fullfile(project_dir, 'out', 'logs');
+    images_dir = fullfile(project_dir, 'out', 'images');
 
     % Création des dossiers de sortie
-    if ~exist('../out', 'dir')
-        mkdir('../out');
+    if ~exist(out_dir, 'dir')
+        mkdir(out_dir);
     end
-    if ~exist('../images', 'dir')
-        mkdir('../images');
+    if ~exist(images_dir, 'dir')
+        mkdir(images_dir);
     end
 
     % Ouverture du fichier log
-    log_file = fopen('../out/log_compare_angles.txt', 'w');
+    log_file = fopen(fullfile(out_dir, 'log_compare_angles.txt'), 'w');
 
     % Paramètres physiques
     g = 9.80665;                % gravité (m/s^2)
@@ -80,7 +84,7 @@ function compare_projectile_angles()
     end
 
     legend('Location', 'best');
-    saveas(gcf, '../images/comparaison_trajectoires_angles.png');
+    saveas(gcf, fullfile(images_dir, 'comparaison_trajectoires_angles.png'));
 
     fclose(log_file);
 end

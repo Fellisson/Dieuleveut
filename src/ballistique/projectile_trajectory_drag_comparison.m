@@ -11,17 +11,23 @@
 % comparison plots, an animation and a text log.
 
 function projectile_trajectory_drag_comparison(~, ~)
+    base_dir = fileparts(mfilename('fullpath'));
+    project_dir = fileparts(fileparts(base_dir));
+    out_dir = fullfile(project_dir, 'out', 'logs');
+    images_dir = fullfile(project_dir, 'out', 'images');
 
     % Create output folders if needed
-    if ~exist('out', 'dir')
-        mkdir('out');
+    if ~exist(out_dir, 'dir')
+        mkdir(out_dir);
     end
-    if ~exist('images', 'dir')
-        mkdir('images');
+    if ~exist(images_dir, 'dir')
+        mkdir(images_dir);
     end
 
     % Log file
-    log_file = fopen('../out/log_drag_comparison.txt', 'a');
+    log_file = fopen(fullfile(out_dir, 'log_drag_comparison.txt'), 'a');
+    cleanup_log = onCleanup(@() close_file_if_open(log_file));
+    is_batch = is_batch_mode();
 
     %% Physical constants
     g = 9.80665;          % gravity (m/s^2)
@@ -63,29 +69,6 @@ function projectile_trajectory_drag_comparison(~, ~)
     [tfD, bD, hD, tuD, tcD] = compute_quantities(tD, vxD, vyD, xD, yD);
     [tfN, bN, hN, tuN, tcN] = compute_quantities(tN, vxN, vyN, xN, yN);
 
-    %% Plots
-    plot_comparison_results(tD, vxD, vyD, xD, yD, mD, TD, ...
-                            tN, vxN, vyN, xN, yN, mN, TN);
-
-    %% Animation
-    plot_trajectory_animation_comparison(xD, yD, xN, yN);
-
-    %% Display
-    disp('================ WITH DRAG ================');
-    disp(['Flight Time       : ', num2str(tfD), ' s']);
-    disp(['Range             : ', num2str(bD/1e3), ' km']);
-    disp(['Maximum Altitude  : ', num2str(hD/1e3), ' km']);
-    disp(['Ascent Time       : ', num2str(tuD), ' s']);
-    disp(['Descent Time      : ', num2str(tcD), ' s']);
-
-    disp('============== WITHOUT DRAG ==============');
-    disp(['Flight Time       : ', num2str(tfN), ' s']);
-    disp(['Range             : ', num2str(bN/1e3), ' km']);
-    disp(['Maximum Altitude  : ', num2str(hN/1e3), ' km']);
-    disp(['Ascent Time       : ', num2str(tuN), ' s']);
-    disp(['Descent Time      : ', num2str(tcN), ' s']);
-    disp('==========================================');
-
     %% Save to log file
     fprintf(log_file, '=========== DRAG COMPARISON ===========\n');
 
@@ -104,7 +87,28 @@ function projectile_trajectory_drag_comparison(~, ~)
     fprintf(log_file, 'Descent Time     : %.4f s\n', tcN);
     fprintf(log_file, '=======================================\n\n');
 
-    fclose(log_file);
+    %% Display
+    disp('================ WITH DRAG ================');
+    disp(['Flight Time       : ', num2str(tfD), ' s']);
+    disp(['Range             : ', num2str(bD/1e3), ' km']);
+    disp(['Maximum Altitude  : ', num2str(hD/1e3), ' km']);
+    disp(['Ascent Time       : ', num2str(tuD), ' s']);
+    disp(['Descent Time      : ', num2str(tcD), ' s']);
+
+    disp('============== WITHOUT DRAG ==============');
+    disp(['Flight Time       : ', num2str(tfN), ' s']);
+    disp(['Range             : ', num2str(bN/1e3), ' km']);
+    disp(['Maximum Altitude  : ', num2str(hN/1e3), ' km']);
+    disp(['Ascent Time       : ', num2str(tuN), ' s']);
+    disp(['Descent Time      : ', num2str(tcN), ' s']);
+    disp('==========================================');
+
+    %% Plots
+    plot_comparison_results(tD, vxD, vyD, xD, yD, mD, TD, ...
+                            tN, vxN, vyN, xN, yN, mN, TN, images_dir, is_batch);
+
+    %% Animation
+    plot_trajectory_animation_comparison(xD, yD, xN, yN, images_dir, is_batch);
 end
 
 
@@ -194,9 +198,10 @@ end
 
 
 function plot_comparison_results(tD, vxD, vyD, xD, yD, mD, TD, ...
-                                 tN, vxN, vyN, xN, yN, ~, TN)
+                                 tN, vxN, vyN, xN, yN, ~, TN, images_dir, is_batch)
 
-    figure('Position', [100, 100, 1000, 900]);
+    fig = figure('Position', [100, 100, 1000, 900], ...
+        'Visible', figure_visibility(is_batch));
 
     % Velocity
     subplot(4,1,1);
@@ -251,15 +256,15 @@ function plot_comparison_results(tD, vxD, vyD, xD, yD, mD, TD, ...
     legend('Mass', 'Thrust', 'Location', 'best');
     grid on;
 
-    cd('/images');
-    saveas(gcf, 'drag_comparison_results.png');
-    cd('../');
+    saveas(fig, fullfile(images_dir, 'drag_comparison_results.png'));
+    close(fig);
 end
 
 
-function plot_trajectory_animation_comparison(xD, yD, xN, yN)
+function plot_trajectory_animation_comparison(xD, yD, xN, yN, images_dir, is_batch)
 
-    figure('Position', [120, 120, 900, 600], 'Color', [0.75 0.87 1]);
+    fig = figure('Position', [120, 120, 900, 600], 'Color', [0.75 0.87 1], ...
+        'Visible', figure_visibility(is_batch));
     hold on;
     grid on;
     xlabel('Horizontal Position (km)');
@@ -280,7 +285,12 @@ function plot_trajectory_animation_comparison(xD, yD, xN, yN)
 
     Nmax = max(length(xD), length(xN));
 
-    for i = 2:Nmax
+    step = 1;
+    if is_batch
+        step = max(1, ceil(Nmax / 250));
+    end
+
+    for i = 2:step:Nmax
         if i <= length(xD)
             set(hD, 'XData', xD(i)/1e3, 'YData', yD(i)/1e3);
         end
@@ -288,11 +298,30 @@ function plot_trajectory_animation_comparison(xD, yD, xN, yN)
             set(hN, 'XData', xN(i)/1e3, 'YData', yN(i)/1e3);
         end
 
-        drawnow;
-        pause(1e-3);
+        drawnow limitrate nocallbacks;
+        if ~is_batch
+            pause(1e-3);
+        end
     end
 
-    cd('../images');
-    saveas(gcf, 'drag_comparison_animation.png');
-    cd('../');
+    saveas(fig, fullfile(images_dir, 'drag_comparison_animation.png'));
+    close(fig);
+end
+
+function mode = figure_visibility(is_batch)
+    if is_batch
+        mode = 'off';
+    else
+        mode = 'on';
+    end
+end
+
+function tf = is_batch_mode()
+    tf = ~usejava('desktop');
+end
+
+function close_file_if_open(file_id)
+    if file_id > 0
+        fclose(file_id);
+    end
 end

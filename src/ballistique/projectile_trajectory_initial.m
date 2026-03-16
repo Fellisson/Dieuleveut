@@ -13,6 +13,10 @@
 % For more explanations go to Wiki link:
 % <https://en.wikipedia.org/wiki/Projectile_motion>
 function projectile_trajectory(~, ~)
+    base_dir = fileparts(mfilename('fullpath'));
+    project_dir = fileparts(fileparts(base_dir));
+    out_dir = fullfile(project_dir, 'out', 'logs');
+    images_dir = fullfile(project_dir, 'out', 'images');
 
     % Simulate and analyze the trajectory of a projectile
     %
@@ -21,15 +25,15 @@ function projectile_trajectory(~, ~)
     %   - alpha0: Launch angle (degrees)
     
     % Create out directory if it doesn't exist
-    if ~exist('out', 'dir')
-        mkdir('out');
+    if ~exist(out_dir, 'dir')
+        mkdir(out_dir);
     end
-    if ~exist('images', 'dir')
-        mkdir('images');
+    if ~exist(images_dir, 'dir')
+        mkdir(images_dir);
     end
 
     % Open log file for writing
-    log_file = fopen('../out/log.txt', 'a');
+    log_file = fopen(fullfile(out_dir, 'log.txt'), 'a');
 
     % Physical parameters
     g = 9.80665;                % gravitational acceleration (m/s^2)
@@ -49,13 +53,13 @@ function projectile_trajectory(~, ~)
     % Compute trajectory
     [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m);
     
-    plot_results(t, vx, vy, x, y);
+    plot_results(t, vx, vy, x, y, images_dir);
 
     % Compute and display relevant quantities
     [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, g);
 
     % Animate trajectory
-    plot_trajectory_animation(x, y, vx, vy);
+    plot_trajectory_animation(x, y, vx, vy, images_dir);
 
     % Save outputs to log file
     fprintf(log_file, '============= PROJECTILE MOTION =============\n');
@@ -119,7 +123,7 @@ function [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m)
     y = y(1:i);
 end
 
-function plot_results(t, vx, vy, x, y)
+function plot_results(t, vx, vy, x, y, images_dir)
     % Plots the results of projectile simulation
     %
     % Inputs:
@@ -157,15 +161,14 @@ function plot_results(t, vx, vy, x, y)
     title('Ballistic Curve');
 
     % Save the plot with larger spaces
-    cd('../images')
-    saveas(gcf, 'velocity_position_curve.png');
+    saveas(gcf, fullfile(images_dir, 'velocity_position_curve.png'));
 
     % Set axis to be equal and tight
     axis equal;
     axis tight;
 end
 
-function plot_trajectory_animation(x, y, vx, vy)
+function plot_trajectory_animation(x, y, vx, vy, images_dir)
     % Animates the trajectory of a projectile
     %
     % Inputs:
@@ -240,8 +243,7 @@ function plot_trajectory_animation(x, y, vx, vy)
         pause(1e-3);
     end
 
-    saveas(gcf, 'trajectory_animation.png');
-    cd('../')
+    saveas(gcf, fullfile(images_dir, 'trajectory_animation.png'));
 end
 
 function [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, ~)

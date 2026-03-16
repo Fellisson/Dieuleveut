@@ -1,0 +1,27 @@
+=========== Angle = 20 degres ===========
+Temps de vol         : 8.9443 s
+Portee               : 0.6173 km
+Altitude maximale    : 0.1091 km
+Temps de montee      : 3.5609 s
+Temps de descente    : 5.3833 s
+Chaleur produite     : 39.1250 kJ
+=========================================
+
+=========== Angle = 30 degres ===========
+Temps de vol         : 11.6670 s
+Portee               : 0.6329 km
+Altitude maximale    : 0.1838 km
+Temps de montee      : 4.5014 s
+Temps de descente    : 7.1656 s
+Chaleur produite     : 39.0293 kJ
+=========================================
+
+=========== Angle = 45 degres ===========
+Temps de vol         : 15.0706 s
+Portee               : 0.5777 km
+Altitude maximale    : 0.2949 km
+Temps de montee      : 5.6298 s
+Temps de descente    : 9.4408 s
+Chaleur produite     : 38.8974 kJ
+=========================================
+

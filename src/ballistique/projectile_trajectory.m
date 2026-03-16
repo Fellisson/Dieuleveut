@@ -13,6 +13,10 @@
 % For more explanations go to Wiki link:
 % <https://en.wikipedia.org/wiki/Projectile_motion>
 function projectile_trajectory(~, ~)
+    base_dir = fileparts(mfilename('fullpath'));
+    project_dir = fileparts(fileparts(base_dir));
+    out_dir = fullfile(project_dir, 'out', 'logs');
+    images_dir = fullfile(project_dir, 'out', 'images');
 
     % Simulate and analyze the trajectory of a projectile
     %
@@ -21,15 +25,16 @@ function projectile_trajectory(~, ~)
     %   - alpha0: Launch angle (degrees)
     
     % Create out directory if it doesn't exist
-    if ~exist('out', 'dir')
-        mkdir('out');
+    if ~exist(out_dir, 'dir')
+        mkdir(out_dir);
     end
-    if ~exist('images', 'dir')
-        mkdir('images');
+    if ~exist(images_dir, 'dir')
+        mkdir(images_dir);
     end
 
     % Open log file for writing
-    log_file = fopen('../out/log.txt', 'a');
+    log_file = fopen(fullfile(out_dir, 'log.txt'), 'a');
+    is_batch = is_batch_mode();
 
     % Physical parameters
     g = 9.80665;                % gravitational acceleration (m/s^2)
@@ -49,13 +54,13 @@ function projectile_trajectory(~, ~)
     % Compute trajectory
     [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m);
     
-    plot_results(t, vx, vy, x, y);
+    plot_results(t, vx, vy, x, y, images_dir, is_batch);
 
     % Compute and display relevant quantities
     [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, g);
 
     % Animate trajectory
-    plot_trajectory_animation(x, y, vx, vy);
+    plot_trajectory_animation(x, y, vx, vy, images_dir, is_batch);
 
     % Save outputs to log file
     fprintf(log_file, '============= PROJECTILE MOTION =============\n');
@@ -119,7 +124,7 @@ function [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m)
     y = y(1:i);
 end
 
-function plot_results(t, vx, vy, x, y)
+function plot_results(t, vx, vy, x, y, images_dir, is_batch)
     % Plots the results of projectile simulation
     %
     % Inputs:
@@ -128,7 +133,8 @@ function plot_results(t, vx, vy, x, y)
     %   - vy: Velocity component along y-axis (m/s)
     %   - x: Horizontal position (m)
     %   - y: Vertical position (m)
-    figure('Position', [100, 100, 800, 600]);
+    fig = figure('Position', [100, 100, 800, 600], ...
+        'Visible', figure_visibility(is_batch));
 
     % Plot velocity components
     subplot(3, 1, 1);
@@ -157,15 +163,15 @@ function plot_results(t, vx, vy, x, y)
     title('Ballistic Curve');
 
     % Save the plot with larger spaces
-    cd('../images')
-    saveas(gcf, 'velocity_position_curve.png');
+    saveas(fig, fullfile(images_dir, 'velocity_position_curve.png'));
 
     % Set axis to be equal and tight
     axis equal;
     axis tight;
+    close(fig);
 end
 
-function plot_trajectory_animation(x, y, vx, vy)
+function plot_trajectory_animation(x, y, vx, vy, images_dir, is_batch)
     % Animates the trajectory of a projectile
     %
     % Inputs:
@@ -175,7 +181,8 @@ function plot_trajectory_animation(x, y, vx, vy)
     %   - vy: Velocity component along y-axis (m/s)
     
     % Create a figure with gradient sky background
-    figure('Position', [100, 100, 800, 600], 'Color', [0.7, 0.85, 1]);
+    fig = figure('Position', [100, 100, 800, 600], 'Color', [0.7, 0.85, 1], ...
+        'Visible', figure_visibility(is_batch));
     xlabel('Horizontal Position (km)');
     ylabel('Vertical Position (km)');
     grid;
@@ -236,12 +243,14 @@ function plot_trajectory_animation(x, y, vx, vy)
         trail_y = [trail_y(2:end); y(i) / 1e3];
         set(trail, 'XData', trail_x, 'YData', trail_y, 'Color', color_scale(i)*[1., 0.01, 0.01]);
 
-        drawnow;
-        pause(1e-3);
+        drawnow limitrate nocallbacks;
+        if ~is_batch
+            pause(1e-3);
+        end
     end
 
-    saveas(gcf, 'trajectory_animation.png');
-    cd('../')
+    saveas(fig, fullfile(images_dir, 'trajectory_animation.png'));
+    close(fig);
 end
 
 function [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, ~)
@@ -280,5 +289,16 @@ function [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, ~)
     disp(['     Descent Time: ', num2str(tc), ' s']);
     disp(['     Heat Produced: ', num2str(Q / 1e3), ' kJ']);
     disp('=============================================');
-    close(gcf);
+end
+
+function mode = figure_visibility(is_batch)
+    if is_batch
+        mode = 'off';
+    else
+        mode = 'on';
+    end
+end
+
+function tf = is_batch_mode()
+    tf = ~usejava('desktop');
 end

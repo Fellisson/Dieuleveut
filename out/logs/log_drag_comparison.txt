@@ -1,0 +1,48 @@
+=========== DRAG COMPARISON ===========
+WITH DRAG
+Flight Time      : 11.6663 s
+Range            : 0.7948 km
+Maximum Altitude : 0.1957 km
+Ascent Time      : 3.5847 s
+Descent Time     : 8.0816 s
+
+WITHOUT DRAG
+Flight Time      : 80.0000 s
+Range            : 94.5332 km
+Maximum Altitude : 9.3975 km
+Ascent Time      : 43.9768 s
+Descent Time     : 36.0232 s
+=======================================
+
+=========== DRAG COMPARISON ===========
+WITH DRAG
+Flight Time      : 11.6663 s
+Range            : 0.7948 km
+Maximum Altitude : 0.1957 km
+Ascent Time      : 3.5847 s
+Descent Time     : 8.0816 s
+
+WITHOUT DRAG
+Flight Time      : 80.0000 s
+Range            : 94.5332 km
+Maximum Altitude : 9.3975 km
+Ascent Time      : 43.9768 s
+Descent Time     : 36.0232 s
+=======================================
+
+=========== DRAG COMPARISON ===========
+WITH DRAG
+Flight Time      : 11.6663 s
+Range            : 0.7948 km
+Maximum Altitude : 0.1957 km
+Ascent Time      : 3.5847 s
+Descent Time     : 8.0816 s
+
+WITHOUT DRAG
+Flight Time      : 80.0000 s
+Range            : 94.5332 km
+Maximum Altitude : 9.3975 km
+Ascent Time      : 43.9768 s
+Descent Time     : 36.0232 s
+=======================================
+

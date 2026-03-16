@@ -7,8 +7,11 @@
 %   - animated visualization and video recording.
 %
 % Output:
-%   - videos/controle_2D_PID_animation.mp4
+%   - out/videos/controle_2D_PID_animation.mp4
 clc; clear; close all;
+base_dir = fileparts(mfilename('fullpath'));
+project_dir = fileparts(fileparts(base_dir));
+videos_dir = fullfile(project_dir, 'out', 'videos');
 
 %% =========================
 % PARAMETRES PHYSIQUES
@@ -262,11 +265,11 @@ legend('Consigne', 'Angle', 'Location', 'best');
 %% =========================
 % VIDEO MP4
 %% =========================
-if ~exist('videos', 'dir')
-    mkdir('videos');
+if ~exist(videos_dir, 'dir')
+    mkdir(videos_dir);
 end
 
-videoPath = fullfile('videos', 'controle_2D_PID_animation.mp4');
+videoPath = fullfile(videos_dir, 'controle_2D_PID_animation.mp4');
 vw = VideoWriter(videoPath, 'MPEG-4');
 vw.FrameRate = 30;
 vw.Quality = 100;

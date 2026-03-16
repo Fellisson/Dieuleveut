@@ -1,0 +1,8 @@
+============= PROJECTILE MOTION =============
+         Flight Time: 8.944265 s
+         Range: 0.617273 km
+         Maximum Altitude: 0.109149 km
+         Ascent Time: 3.560948 s
+         Descent Time: 5.383316 s
+         Heat Produced: 39.124999 kJ
+=============================================
