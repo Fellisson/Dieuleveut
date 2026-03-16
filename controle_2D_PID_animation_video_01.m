@@ -1,3 +1,13 @@
+% 2D vehicle control with PID and MP4 export.
+% This script simulates a simplified 2D vehicle with:
+%   - horizontal and vertical translation;
+%   - angular motion;
+%   - altitude and angle PID control loops;
+%   - wind disturbances;
+%   - animated visualization and video recording.
+%
+% Output:
+%   - videos/controle_2D_PID_animation.mp4
 clc; clear; close all;
 
 %% =========================

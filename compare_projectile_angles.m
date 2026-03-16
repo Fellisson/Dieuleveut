@@ -1,3 +1,17 @@
+% Compare trajectories for several launch angles.
+% This function simulates the same projectile launched with different
+% initial angles, then compares the resulting ranges, altitudes and
+% flight times on a single figure and in a text log.
+%
+% Generated outputs:
+%   - ../images/comparaison_trajectoires_angles.png
+%   - ../out/log_compare_angles.txt
+%
+% Main steps:
+%   1. Define physical parameters and drag coefficients
+%   2. Simulate the trajectory for each launch angle
+%   3. Compute summary quantities
+%   4. Save a comparison plot and a log file
 function compare_projectile_angles()
 
     % Création des dossiers de sortie
@@ -73,6 +87,8 @@ end
 
 
 function [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m)
+    % Numerically integrates the projectile motion with linear and
+    % quadratic drag using an explicit Euler scheme.
 
     t0 = 0;
     tf = 2 * v0 / g * sind(alpha0);
@@ -112,6 +128,9 @@ end
 
 
 function [tf, b, h, tu, tc, Q] = compute_quantities_simple(t, vx, vy, x, y, v0, m)
+    % Extracts flight metrics from the simulated trajectory:
+    % final time, range, peak altitude, ascent/descent times and the
+    % estimated kinetic energy lost to heat.
 
     tf = t(end);
     b = x(end);

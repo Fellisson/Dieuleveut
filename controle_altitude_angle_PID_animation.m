@@ -1,3 +1,11 @@
+% Vertical vehicle control with altitude and angle PID loops.
+% This script simulates a simplified vehicle moving in the vertical plane.
+% Two PID controllers are used:
+%   - one for altitude tracking;
+%   - one for attitude control.
+%
+% The simulation includes actuator saturation, simple anti-windup,
+% vertical and angular disturbances, and a live animation of the response.
 clc; clear; close all;
 
 %% Paramètres physiques

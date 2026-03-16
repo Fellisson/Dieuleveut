@@ -1,6 +1,14 @@
 % Rocket/Projectile simulation:
 % comparison with and without aerodynamic drag
 % Author: Felic Nimy - modified version
+%
+% This function compares two simulated trajectories for the same propelled
+% projectile:
+%   - case 1: aerodynamic drag enabled;
+%   - case 2: aerodynamic drag disabled.
+%
+% It computes kinematics, mass evolution and thrust history, then produces
+% comparison plots, an animation and a text log.
 
 function projectile_trajectory_drag_comparison(~, ~)
 

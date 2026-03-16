@@ -1,3 +1,9 @@
+% Video generation for the drag/no-drag projectile comparison.
+% This function runs two projectile simulations and records an annotated
+% side-by-side style comparison in MP4 format.
+%
+% Output:
+%   - ../videos/drag_comparison_animation.mp4
 function projectile_trajectory_drag_comparison_video(~, ~)
     clc; close all;
 
