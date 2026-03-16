@@ -96,14 +96,76 @@ Le comportement reste exploitable visuellement, ce qui suggere que la commande
 PID maintient l'ensemble du systeme dans un regime controle, meme en presence
 de perturbations successives.
 
+## 6. Visualisation 3D reliee au modele 2D
+
+Le script [src/controle_pid/animation_3D_visualisation.m](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/src/controle_pid/animation_3D_visualisation.m) reutilise maintenant les donnees issues du noyau commun :
+
+- [src/controle_pid/simulate_controle_2D_PID.m](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/src/controle_pid/simulate_controle_2D_PID.m)
+
+et produit la video :
+
+- [out/videos/animation_3D_visualisation.mp4](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/out/videos/animation_3D_visualisation.mp4)
+
+### Interpretation
+
+Cette vue 3D ne change pas la physique du modele 2D, mais elle rend plus
+lisibles :
+
+- l'orientation du vehicule ;
+- la trajectoire dans l'espace ;
+- la relation entre attitude et deplacement.
+
+Elle sert donc de passerelle entre le modele plan et une lecture spatiale
+plus intuitive.
+
+## 7. Controle 3D autonome
+
+Le script [src/controle_pid/controle_3D_PID_animation.m](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/src/controle_pid/controle_3D_PID_animation.m) produit :
+
+- [out/videos/controle_3D_PID_animation.mp4](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/out/videos/controle_3D_PID_animation.mp4)
+- [out/images/controle_3D_PID_animation.png](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/out/images/controle_3D_PID_animation.png)
+
+### Interpretation
+
+Ce modele represente un vehicule controle en 3D qui cherche a suivre des
+consignes de position et d'attitude. Le resultat attendu n'est pas une chute,
+mais un maintien du controle dans l'espace.
+
+Il illustre surtout :
+
+- la stabilisation spatiale ;
+- le couplage entre translation et rotation ;
+- le role des boucles PID en cascade.
+
+## 8. Projectile guide a comportement balistique
+
+Le script [src/controle_pid/controle_3D_PID_ballistique.m](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/src/controle_pid/controle_3D_PID_ballistique.m) produit :
+
+- [out/videos/controle_3D_PID_ballistique.mp4](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/out/videos/controle_3D_PID_ballistique.mp4)
+- [out/images/controle_3D_PID_ballistique.png](c:/Users/Felix%20NIMY/OneDrive/Documents/MATLAB/Felix%20Nimy/out/images/controle_3D_PID_ballistique.png)
+
+### Interpretation
+
+Ce resultat est important car il combine :
+
+- une phase propulsee et regulee par PID ;
+- une phase balistique sous gravite ;
+- un impact final au sol.
+
+On obtient donc un comportement plus proche d'un projectile guide que d'un
+vehicule stationnaire. C'est le script le plus adapte pour representer une
+trajectoire "qui tombe" tout en gardant une logique de commande.
+
 ## Conclusion generale
 
-Les resultats confirment trois idees principales :
+Les resultats confirment quatre idees principales :
 
 1. la resistance de l'air influence fortement la trajectoire d'un projectile ;
 2. l'angle optimal de portee depend du modele physique retenu ;
 3. les commandes PID implementees stabilisent correctement le systeme dans les
    scenarios testes.
+4. il est possible de combiner guidage PID et comportement balistique dans un
+   meme scenario 3D.
 
 Dans l'ensemble, les simulations sont coherentes avec les attentes physiques
 et pedagogiquement utiles pour illustrer l'effet des parametres de tir et

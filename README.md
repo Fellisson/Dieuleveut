@@ -24,10 +24,15 @@ Felix Nimy/
 |  |  `- projectile_trajectory_drag_comparison_video.m
 |  `- controle_pid/
 |     |- controle_altitude_angle_PID_animation.m
-|     `- controle_2D_PID_animation_video_01.m
+|     |- controle_2D_PID_animation_video_01.m
+|     |- simulate_controle_2D_PID.m
+|     |- animation_3D_visualisation.m
+|     |- controle_3D_PID_animation.m
+|     `- controle_3D_PID_ballistique.m
 |- docs/
 |  |- processus.md
-|  `- resultats.md
+|  |- resultats.md
+|  `- analyse_resultats.md
 |- out/
 |  |- logs/
 |  |- images/
@@ -65,6 +70,9 @@ projectile_trajectory_drag_comparison
 projectile_trajectory_drag_comparison_video
 controle_altitude_angle_PID_animation
 controle_2D_PID_animation_video_01
+animation_3D_visualisation
+controle_3D_PID_animation
+controle_3D_PID_ballistique
 ```
 
 Le script `setup_paths.m` ajoute automatiquement `src/` et ses sous-dossiers
@@ -74,8 +82,12 @@ au path MATLAB.
 
 - [Processus](docs/processus.md)
 - [Resultats](docs/resultats.md)
+- [Analyse](docs/analyse_resultats.md)
 
 ## Remarque
 
 Les scripts ont ete adaptes pour enregistrer leurs sorties dans `out/`
 independamment du dossier courant d'execution.
+
+Les vues 2D et 3D du controle PID s'appuient maintenant sur un noyau commun
+de simulation : `simulate_controle_2D_PID.m`.
