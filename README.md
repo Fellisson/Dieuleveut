@@ -14,10 +14,10 @@ Ce depot regroupe plusieurs travaux autour :
 
 Le projet a une vocation a la fois pedagogique et experimentale : il permet d'observer l'influence des parametres physiques sur la portee, l'altitude, le temps de vol et la stabilite.
 
-## Points forts
+## Points Forts
 
 - simulations balistiques 2D parametrees
-- comparaison multi-angles : `20°`, `30°`, `45°`, `60°`, `75°`
+- comparaison multi-angles : `20 deg`, `30 deg`, `45 deg`, `60 deg`, `75 deg`
 - comparaison avec frottement et sans frottement
 - animations MP4 generees automatiquement
 - scenarios 3D avec PID et sans PID
@@ -86,6 +86,24 @@ Exemples de sorties generees :
 - `projectile_trajectory_initial_animation_30deg.mp4`
 - `controle_3D_ballistique_avec_PID.mp4`
 
+## Captures D'Ecran
+
+### Comparaison des angles de tir
+
+![Comparaison des angles](out/images/comparaison_trajectoires_angles.png)
+
+### Avec et sans frottement
+
+![Comparaison avec et sans frottement](out/images/comparaison_angles_avec_sans_frottement.png)
+
+### Trajectoire balistique initiale
+
+![Trajectoire initiale 30 deg](out/images/trajectory_animation_initial_30deg.png)
+
+### Scenario 3D avec PID
+
+![Controle 3D avec PID](out/images/controle_3D_ballistique_avec_PID.png)
+
 ## Demarrage Rapide
 
 Depuis MATLAB :
@@ -117,8 +135,8 @@ cd "/c/Users/Felix NIMY/OneDrive/Documents/MATLAB/Felix Nimy"
 
 Les simulations montrent notamment que :
 
-- en presence de frottement, `45°` n'est plus necessairement l'angle de portee maximale
-- dans ce modele, `30°` donne une meilleure portee que `45°`
+- en presence de frottement, `45 deg` n'est plus necessairement l'angle de portee maximale
+- dans ce modele, `30 deg` donne une meilleure portee que `45 deg`
 - les grands angles augmentent l'altitude maximale et le temps de vol
 - le frottement penalise davantage les trajectoires hautes, car le projectile reste plus longtemps dans l'air
 - les versions avec PID et sans PID permettent d'observer l'effet du controle sur la trajectoire et la stabilisation
@@ -127,11 +145,11 @@ Exemple de tendance observee avec frottement :
 
 | Angle | Portee | Altitude max | Interpretation |
 |---|---:|---:|---|
-| `20°` | ~0.617 km | ~0.109 km | tir tendu, rapide, faible altitude |
-| `30°` | ~0.633 km | ~0.184 km | meilleur compromis portee / elevation |
-| `45°` | ~0.578 km | ~0.295 km | plus haut, plus long, mais moins loin |
-| `60°` | ~0.449 km | ~0.391 km | trajectoire tres cabree |
-| `75°` | ~0.253 km | ~0.457 km | quasi verticale, altitude forte, faible portee |
+| `20 deg` | ~0.617 km | ~0.109 km | tir tendu, rapide, faible altitude |
+| `30 deg` | ~0.633 km | ~0.184 km | meilleur compromis portee / elevation |
+| `45 deg` | ~0.578 km | ~0.295 km | plus haut, plus long, mais moins loin |
+| `60 deg` | ~0.449 km | ~0.391 km | trajectoire tres cabree |
+| `75 deg` | ~0.253 km | ~0.457 km | quasi verticale, altitude forte, faible portee |
 
 ## Objectif Pedagogique
 
