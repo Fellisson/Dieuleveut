@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Projet MATLAB - Structure reorganisee
 
 ## Vue d'ensemble
@@ -91,3 +92,6 @@ independamment du dossier courant d'execution.
 
 Les vues 2D et 3D du controle PID s'appuient maintenant sur un noyau commun
 de simulation : `simulate_controle_2D_PID.m`.
+=======
+# Dieuleveut
+>>>>>>> f9c1a94a9ecd941d21a3630796ebb991cb3b890a
