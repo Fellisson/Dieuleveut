@@ -86,21 +86,29 @@ Exemples de sorties generees :
 - `projectile_trajectory_initial_animation_30deg.mp4`
 - `controle_3D_ballistique_avec_PID.mp4`
 
-## Captures D'Ecran
+## Galerie
 
 ### Comparaison des angles de tir
+
+Cette figure compare plusieurs angles de lancement et montre comment la portee et l'altitude evoluent selon l'inclinaison initiale.
 
 ![Comparaison des angles](out/images/comparaison_trajectoires_angles.png)
 
 ### Avec et sans frottement
 
+Cette comparaison met en evidence l'effet de la trainee aerodynamique sur la forme de la trajectoire et sur la distance parcourue.
+
 ![Comparaison avec et sans frottement](out/images/comparaison_angles_avec_sans_frottement.png)
 
 ### Trajectoire balistique initiale
 
+Exemple d'animation exportee pour un tir a `30 deg`, utile pour suivre la position et la vitesse au cours du vol.
+
 ![Trajectoire initiale 30 deg](out/images/trajectory_animation_initial_30deg.png)
 
 ### Scenario 3D avec PID
+
+Visualisation 3D d'un scenario guide avec PID, montrant l'evolution spatiale du projectile et la dynamique du mouvement.
 
 ![Controle 3D avec PID](out/images/controle_3D_ballistique_avec_PID.png)
 
@@ -164,4 +172,3 @@ Ce projet permet d'illustrer :
 ## Auteur
 
 Felix Nimy
-
