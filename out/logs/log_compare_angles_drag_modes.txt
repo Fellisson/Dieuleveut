@@ -1,0 +1,25 @@
+=========== Angle = 20 degres ===========
+AVEC FROTTEMENT   : tf = 8.9746 s | portee = 0.6184 km | hmax = 0.1092 km
+SANS FROTTEMENT   : tf = 20.9258 s | portee = 5.8991 km | hmax = 0.5375 km
+=========================================
+
+=========== Angle = 30 degres ===========
+AVEC FROTTEMENT   : tf = 11.7205 s | portee = 0.6344 km | hmax = 0.1840 km
+SANS FROTTEMENT   : tf = 30.5915 s | portee = 7.9479 km | hmax = 1.1488 km
+=========================================
+
+=========== Angle = 45 degres ===========
+AVEC FROTTEMENT   : tf = 15.1528 s | portee = 0.5794 km | hmax = 0.2954 km
+SANS FROTTEMENT   : tf = 43.2629 s | portee = 9.1774 km | hmax = 2.2976 km
+=========================================
+
+=========== Angle = 60 degres ===========
+AVEC FROTTEMENT   : tf = 17.8387 s | portee = 0.4499 km | hmax = 0.3915 km
+SANS FROTTEMENT   : tf = 52.9860 s | portee = 7.9479 km | hmax = 3.4465 km
+=========================================
+
+=========== Angle = 75 degres ===========
+AVEC FROTTEMENT   : tf = 19.6431 s | portee = 0.2537 km | hmax = 0.4579 km
+SANS FROTTEMENT   : tf = 59.0982 s | portee = 4.5887 km | hmax = 4.2875 km
+=========================================
+

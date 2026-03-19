@@ -3,8 +3,8 @@
 % follows a ballistic trajectory under gravity until impact.
 %
 % Outputs:
-%   - out/videos/controle_3D_PID_ballistique.mp4
-%   - out/images/controle_3D_PID_ballistique.png
+%   - out/videos/controle_3D_ballistique_avec_PID.mp4
+%   - out/images/controle_3D_ballistique_avec_PID.png
 
 clc; clear; close all;
 
@@ -260,8 +260,8 @@ ylabel(axAtt, 'Angle (deg)');
 title(axAtt, 'Attitude pendant le vol');
 legend(axAtt, 'phi', 'theta', 'psi', 'Location', 'best');
 
-videoPath = fullfile(videos_dir, 'controle_3D_PID_ballistique.mp4');
-tempVideoPath = fullfile(videos_dir, 'controle_3D_PID_ballistique_tmp.mp4');
+videoPath = fullfile(videos_dir, 'controle_3D_ballistique_avec_PID.mp4');
+tempVideoPath = fullfile(videos_dir, 'controle_3D_ballistique_avec_PID_tmp.mp4');
 if exist(tempVideoPath, 'file')
     delete(tempVideoPath);
 end
@@ -334,7 +334,7 @@ for k = 1:step:numel(t)
     writeVideo(vw, frame);
 end
 
-saveas(fig, fullfile(images_dir, 'controle_3D_PID_ballistique.png'));
+saveas(fig, fullfile(images_dir, 'controle_3D_ballistique_avec_PID.png'));
 close(vw);
 close(fig);
 

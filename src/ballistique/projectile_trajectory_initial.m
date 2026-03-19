@@ -12,11 +12,12 @@
 %
 % For more explanations go to Wiki link:
 % <https://en.wikipedia.org/wiki/Projectile_motion>
-function projectile_trajectory(~, ~)
+function projectile_trajectory_initial(v0, alpha0)
     base_dir = fileparts(mfilename('fullpath'));
     project_dir = fileparts(fileparts(base_dir));
     out_dir = fullfile(project_dir, 'out', 'logs');
     images_dir = fullfile(project_dir, 'out', 'images');
+    videos_dir = fullfile(project_dir, 'out', 'videos');
 
     % Simulate and analyze the trajectory of a projectile
     %
@@ -31,9 +32,21 @@ function projectile_trajectory(~, ~)
     if ~exist(images_dir, 'dir')
         mkdir(images_dir);
     end
+    if ~exist(videos_dir, 'dir')
+        mkdir(videos_dir);
+    end
 
     % Open log file for writing
     log_file = fopen(fullfile(out_dir, 'log.txt'), 'a');
+    is_batch = is_batch_mode();
+
+    if nargin < 1 || isempty(v0)
+        v0 = 300;
+    end
+    if nargin < 2 || isempty(alpha0)
+        alpha0 = 20;
+    end
+    angle_tag = sprintf('%02ddeg', round(alpha0));
 
     % Physical parameters
     g = 9.80665;                % gravitational acceleration (m/s^2)
@@ -49,20 +62,20 @@ function projectile_trajectory(~, ~)
     c = 0.469;                          % form coefficient
     ro0 = 1.22;                         % air density
     b2 = c * 4 * pi * r^2 * ro0 / 2;    % quadratic term coefficient
-    v0=300; alpha0=20;
     % Compute trajectory
     [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m);
     
-    plot_results(t, vx, vy, x, y, images_dir);
+    plot_results(t, vx, vy, x, y, images_dir, is_batch, angle_tag);
 
     % Compute and display relevant quantities
     [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, g);
 
     % Animate trajectory
-    plot_trajectory_animation(x, y, vx, vy, images_dir);
+    plot_trajectory_animation(x, y, vx, vy, images_dir, videos_dir, is_batch, angle_tag);
 
     % Save outputs to log file
     fprintf(log_file, '============= PROJECTILE MOTION =============\n');
+    fprintf(log_file, '         Launch Angle: %f deg\n', alpha0);
     fprintf(log_file, '         Flight Time: %f s\n', tf);
     fprintf(log_file, '         Range: %f km\n', b / 1e3);
     fprintf(log_file, '         Maximum Altitude: %f km\n', h / 1e3);
@@ -123,7 +136,7 @@ function [t, vx, vy, x, y] = compute_trajectory(v0, alpha0, b1, b2, g, m)
     y = y(1:i);
 end
 
-function plot_results(t, vx, vy, x, y, images_dir)
+function plot_results(t, vx, vy, x, y, images_dir, is_batch, angle_tag)
     % Plots the results of projectile simulation
     %
     % Inputs:
@@ -132,7 +145,8 @@ function plot_results(t, vx, vy, x, y, images_dir)
     %   - vy: Velocity component along y-axis (m/s)
     %   - x: Horizontal position (m)
     %   - y: Vertical position (m)
-    figure('Position', [100, 100, 800, 600]);
+    fig = figure('Position', [100, 100, 800, 600], ...
+        'Visible', figure_visibility(is_batch));
 
     % Plot velocity components
     subplot(3, 1, 1);
@@ -161,14 +175,15 @@ function plot_results(t, vx, vy, x, y, images_dir)
     title('Ballistic Curve');
 
     % Save the plot with larger spaces
-    saveas(gcf, fullfile(images_dir, 'velocity_position_curve.png'));
+    saveas(fig, fullfile(images_dir, ['velocity_position_curve_initial_' angle_tag '.png']));
 
     % Set axis to be equal and tight
     axis equal;
     axis tight;
+    close(fig);
 end
 
-function plot_trajectory_animation(x, y, vx, vy, images_dir)
+function plot_trajectory_animation(x, y, vx, vy, images_dir, videos_dir, is_batch, angle_tag)
     % Animates the trajectory of a projectile
     %
     % Inputs:
@@ -178,11 +193,12 @@ function plot_trajectory_animation(x, y, vx, vy, images_dir)
     %   - vy: Velocity component along y-axis (m/s)
     
     % Create a figure with gradient sky background
-    figure('Position', [100, 100, 800, 600], 'Color', [0.7, 0.85, 1]);
+    fig = figure('Position', [100, 100, 800, 600], 'Color', [0.7, 0.85, 1], ...
+        'Visible', figure_visibility(is_batch));
     xlabel('Horizontal Position (km)');
     ylabel('Vertical Position (km)');
     grid;
-    title('Projectile Trajectory');
+    title('Projectile Trajectory Initial');
     axis equal;
     axis tight;
     
@@ -221,7 +237,18 @@ function plot_trajectory_animation(x, y, vx, vy, images_dir)
     trail_y = zeros(trail_length, 1);
     trail = plot(trail_x, trail_y, 'LineWidth', 3);
 
-    for i = 2 : length(x)
+    video_path = fullfile(videos_dir, ['projectile_trajectory_initial_animation_' angle_tag '.mp4']);
+    vw = VideoWriter(video_path, 'MPEG-4');
+    vw.FrameRate = 30;
+    vw.Quality = 100;
+    open(vw);
+
+    step = 1;
+    if is_batch
+        step = max(1, ceil(length(x) / 300));
+    end
+
+    for i = 2 : step : length(x)
         % Update plot with new position
         set(h, 'XData', x(i) / 1e3, 'YData', y(i) / 1e3);
         % Update position text
@@ -239,11 +266,18 @@ function plot_trajectory_animation(x, y, vx, vy, images_dir)
         trail_y = [trail_y(2:end); y(i) / 1e3];
         set(trail, 'XData', trail_x, 'YData', trail_y, 'Color', color_scale(i)*[1., 0.01, 0.01]);
 
-        drawnow;
-        pause(1e-3);
+        drawnow limitrate nocallbacks;
+        frame = getframe(fig);
+        writeVideo(vw, frame);
+        if ~is_batch
+            pause(1e-3);
+        end
     end
 
-    saveas(gcf, fullfile(images_dir, 'trajectory_animation.png'));
+    saveas(fig, fullfile(images_dir, ['trajectory_animation_initial_' angle_tag '.png']));
+    close(vw);
+    close(fig);
+    fprintf('\nVideo enregistree : %s\n', video_path);
 end
 
 function [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, ~)
@@ -282,5 +316,16 @@ function [tf, b, h, tu, tc, Q] = compute_quantities(t, vx, vy, x, y, v0, m, ~)
     disp(['     Descent Time: ', num2str(tc), ' s']);
     disp(['     Heat Produced: ', num2str(Q / 1e3), ' kJ']);
     disp('=============================================');
-    close(gcf);
+end
+
+function mode = figure_visibility(is_batch)
+    if is_batch
+        mode = 'off';
+    else
+        mode = 'on';
+    end
+end
+
+function tf = is_batch_mode()
+    tf = ~usejava('desktop');
 end

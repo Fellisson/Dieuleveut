@@ -25,3 +25,21 @@ Temps de descente    : 9.4408 s
 Chaleur produite     : 38.8974 kJ
 =========================================
 
+=========== Angle = 60 degres ===========
+Temps de vol         : 17.7681 s
+Portee               : 0.4485 km
+Altitude maximale    : 0.3906 km
+Temps de montee      : 6.4708 s
+Temps de descente    : 11.2973 s
+Chaleur produite     : 38.8289 kJ
+=========================================
+
+=========== Angle = 75 degres ===========
+Temps de vol         : 19.5219 s
+Portee               : 0.2528 km
+Altitude maximale    : 0.4566 km
+Temps de montee      : 7.0989 s
+Temps de descente    : 12.4230 s
+Chaleur produite     : 38.8004 kJ
+=========================================
+
