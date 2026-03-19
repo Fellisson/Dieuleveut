@@ -1,16 +1,19 @@
-<<<<<<< HEAD
-# Projet MATLAB - Structure reorganisee
+# Simulation Balistique Et Controle PID Sous MATLAB
+
+Projet MATLAB de simulation balistique 2D/3D, comparaison d'angles de tir, etude de l'effet du frottement aerodynamique, visualisations animees et scenarios avec et sans controle PID.
 
 ## Vue d'ensemble
 
-Le projet est maintenant organise pour separer clairement :
+Ce projet regroupe plusieurs simulations de dynamique de projectile et de vehicule guide sous MATLAB. Il permet d'etudier :
 
-- les processus de calcul dans `src/`
-- la documentation dans `docs/`
-- les resultats generes dans `out/`
+- la trajectoire balistique en 2D
+- l'influence de l'angle de lancement
+- l'effet du frottement de l'air
+- la comparaison entre cas avec et sans trainee
+- des animations et videos automatiques
+- des scenarios 3D avec et sans commande PID
 
-Cette repartition permet de distinguer facilement ce que le code fait
-de ce qu'il produit.
+Le depot produit des sorties dans `out/` sous forme d'images, de logs et de videos, afin de faciliter l'analyse et la presentation des resultats.
 
 ## Structure
 
@@ -19,79 +22,127 @@ Felix Nimy/
 |- src/
 |  |- ballistique/
 |  |  |- compare_projectile_angles.m
+|  |  |- compare_projectile_angles_drag_modes.m
 |  |  |- projectile_trajectory.m
 |  |  |- projectile_trajectory_initial.m
 |  |  |- projectile_trajectory_drag_comparison.m
 |  |  `- projectile_trajectory_drag_comparison_video.m
 |  `- controle_pid/
-|     |- controle_altitude_angle_PID_animation.m
+|     |- animation_3D_visualisation_avec_PID.m
+|     |- animation_3D_visualisation_sans_PID.m
 |     |- controle_2D_PID_animation_video_01.m
-|     |- simulate_controle_2D_PID.m
-|     |- animation_3D_visualisation.m
-|     |- controle_3D_PID_animation.m
-|     `- controle_3D_PID_ballistique.m
+|     |- controle_3D_ballistique_avec_PID.m
+|     |- controle_3D_ballistique_sans_PID.m
+|     `- controle_altitude_angle_PID_animation.m
 |- docs/
-|  |- processus.md
-|  |- resultats.md
-|  `- analyse_resultats.md
 |- out/
-|  |- logs/
 |  |- images/
+|  |- logs/
 |  `- videos/
 |- setup_paths.m
 `- README.md
 ```
 
-## Repartition demandee
+## Fonctionnalites
 
-### Cote processus
+- simulation de trajectoire balistique 2D
+- comparaison de plusieurs angles de tir
+- comparaison avec frottement et sans frottement
+- export automatique des courbes, logs et videos
+- animation MP4 des trajectoires
+- simulation 3D avec controle PID
+- simulation 3D sans PID pour comparaison
 
-Le dossier `src/` contient les scripts et fonctions MATLAB classes par theme :
+## Fichiers principaux
 
-- `src/ballistique` pour les simulations de projectile
-- `src/controle_pid` pour les simulations de controle
+### Ballistique
 
-### Cote resultats
+- `src/ballistique/projectile_trajectory.m`
+- `src/ballistique/projectile_trajectory_initial.m`
+- `src/ballistique/compare_projectile_angles.m`
+- `src/ballistique/compare_projectile_angles_drag_modes.m`
+- `src/ballistique/projectile_trajectory_drag_comparison.m`
+- `src/ballistique/projectile_trajectory_drag_comparison_video.m`
 
-Le dossier `out/` centralise toutes les sorties d'execution :
+### Controle PID
 
-- `out/logs` pour les fichiers texte
-- `out/images` pour les figures exportees
-- `out/videos` pour les animations MP4
+- `src/controle_pid/controle_3D_ballistique_avec_PID.m`
+- `src/controle_pid/controle_3D_ballistique_sans_PID.m`
+- `src/controle_pid/animation_3D_visualisation_avec_PID.m`
+- `src/controle_pid/animation_3D_visualisation_sans_PID.m`
 
-## Utilisation
+## Resultats obtenus
 
-Depuis la racine du projet dans MATLAB :
+Le projet genere automatiquement des fichiers dans `out/` :
+
+- `out/images/` pour les figures PNG
+- `out/logs/` pour les fichiers texte
+- `out/videos/` pour les animations MP4
+
+Exemples de sorties :
+
+- comparaison de trajectoires pour plusieurs angles
+- comparaison avec et sans frottement
+- animation d'une trajectoire balistique
+- visualisations 3D avec et sans PID
+
+## Lancement
+
+Depuis MATLAB :
 
 ```matlab
 run('setup_paths.m')
-compare_projectile_angles
-projectile_trajectory
-projectile_trajectory_drag_comparison
-projectile_trajectory_drag_comparison_video
-controle_altitude_angle_PID_animation
-controle_2D_PID_animation_video_01
-animation_3D_visualisation
-controle_3D_PID_animation
-controle_3D_PID_ballistique
 ```
 
-Le script `setup_paths.m` ajoute automatiquement `src/` et ses sous-dossiers
-au path MATLAB.
+### Exemples ballistiques
 
-## Documentation
+```matlab
+projectile_trajectory
+projectile_trajectory_initial(300, 30)
+projectile_trajectory_initial(300, 45)
+compare_projectile_angles
+compare_projectile_angles_drag_modes
+projectile_trajectory_drag_comparison
+projectile_trajectory_drag_comparison_video
+```
 
-- [Processus](docs/processus.md)
-- [Resultats](docs/resultats.md)
-- [Analyse](docs/analyse_resultats.md)
+### Exemples 3D avec ou sans PID
 
-## Remarque
+```matlab
+controle_3D_ballistique_avec_PID
+controle_3D_ballistique_sans_PID
+animation_3D_visualisation_avec_PID
+animation_3D_visualisation_sans_PID
+```
 
-Les scripts ont ete adaptes pour enregistrer leurs sorties dans `out/`
-independamment du dossier courant d'execution.
+Depuis Git Bash :
 
-Les vues 2D et 3D du controle PID s'appuient maintenant sur un noyau commun
-de simulation : `simulate_controle_2D_PID.m`.
-=======
-# Dieuleveut
->>>>>>> f9c1a94a9ecd941d21a3630796ebb991cb3b890a
+```bash
+cd "/c/Users/Felix NIMY/OneDrive/Documents/MATLAB/Felix Nimy"
+"/d/LOGICIELS/bin/matlab.exe" -batch "run('setup_paths.m'); compare_projectile_angles"
+```
+
+## Interpretation physique
+
+Les comparaisons montrent notamment que :
+
+- l'angle de portee maximale n'est plus necessairement `45 deg` en presence de frottement
+- dans ce modele, `30 deg` donne une meilleure portee que `45 deg`
+- les tirs plus eleves augmentent le temps de vol et l'altitude maximale
+- le frottement penalise fortement les trajectoires hautes en dissipant plus d'energie
+- les versions avec PID et sans PID permettent d'observer l'influence du controle sur la stabilite du vol
+
+## Objectif pedagogique
+
+Ce projet est concu pour illustrer :
+
+- les lois du mouvement balistique
+- l'effet du frottement de l'air
+- l'importance de l'angle initial
+- la difference entre trajectoire libre et trajectoire controlee
+- l'interet du PID dans un modele dynamique
+
+## Auteur
+
+Felix Nimy
+
